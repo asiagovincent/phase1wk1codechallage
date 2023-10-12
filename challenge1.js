@@ -1,30 +1,43 @@
-
-//to determine the  grades based on the marks  from 0 -100
-
-
-let studentMarks=Input
-
-if(input>79){
-    return'A'
+// Create a readline
+const readline = require('readline');
+const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
+});
+// Function to calculate the grade
+function calculateGrade(marks) {
+    if (marks > 79) {
+        return 'A';
+    } else if (marks >= 60 && marks <= 79) {
+        return 'B';
+    } else if (marks >= 50 && marks <= 59) {
+        return 'C';
+    } else if (marks >= 40 && marks <= 49) {
+        return 'D';
+    } else {
+        return 'E';
+    }
 }
-else if(input<=79 && input >=60){
-    return'B-' ;
+// Function to get valid marks input
+function getValidMarksInput() {
+    return new Promise((resolve) => {
+        rl.question('Enter student marks (0-100): ', (marksInput) => {
+            const marks = parseFloat(marksInput);
+            if (!isNaN(marks) && marks >= 0 && marks <= 100) {
+                resolve(marks);
+            } else {
+                console.log('Invalid input. Please enter a valid number between 0 and 100.');
+                getValidMarksInput().then(resolve);
+            }
+        });
+    });
+}
+// Main function to run the program
+async function main() {
+    const marks = await getValidMarksInput();// Get user's input for marks
+    const grade = calculateGrade(marks);// Calculate the grade based on marks
+    console.log(`The Final Grade: ${grade}`);//show the calculated grade
+    rl.close();// Close the readline
 }
 
-else if(input<=59 && input>=49){
-    return'C-' ;
-}
-
-else if(input<=49 && input>=40){
-    return'D-' ;
-}
-
-if(input<40){
-    return'E' ;
-}
-
-console.log(5)
-
-// To display the grades 
-    
-// call this function to calculate the grades of the students
+main();
